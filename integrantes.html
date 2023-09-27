@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style.css" />
+        <title>DNOO37 | EVALUACIÓN Nº2</title>
+    </head>
+    <body>
+        <nav>
+            <h1><a href="index.html">GASPAR JARRY</a></h1>
+            <select onchange="location = this.value;">
+                <option value="index.html">INDEX</option>
+                <option value="integrantes.html" selected>INTEGRANTES</option>
+                <option value="openweather.html">OPEN WEATHER</option>
+                <option value="picture.html">PICTURE OF THE DAY</option>
+                <option value="sismico.html">SÍSMICO</option>
+            </select>
+        </nav>
+        <header style="display: none;">
+            <div>Marque uno:</div>
+            <div><input type="radio" name="selecciona" value="todos" checked />Todos</div>
+            <div><input type="radio" name="selecciona" value="Tauro" />Tauro</div>
+            <div><input type="radio" name="selecciona" value="fijo" />Fijos</div>
+            <div><input type="radio" name="selecciona" value="mutable" />Mutables</div>
+            <div><input type="radio" name="selecciona" value="cardinal" />Cardinales</div>
+        </header>
+        <aside></aside>
+        <main></main>
+        <script>
+            const alternativas = document.querySelector("header");
+            const detalles = document.querySelector("aside");
+            const respuesta = document.querySelector("main");
+            var datos;
+            async function estudiantes() {
+                const data = await fetch("https://raw.githubusercontent.com/profesorfaco/dno037-2023-2/main/clase-07/_curso.json");
+                datos = await data.json();
+                alternativas.removeAttribute("style");
+                console.log(datos);
+                signos = [];
+                datos.forEach((x) => {
+                    if(x.github !== ""){
+                        respuesta.innerHTML += `<article><div><img src="${x.avatar}"></div><div><p><a href="integrante.html?lista=${x.lista}">${x.nombres.split(" ")[0]} ${x.apellidos.split(" ")[0]}</a></p><p>${
+                            x.zodiaco.signo
+                        }</p></div></article>`;
+                        signos.push(x.zodiaco.signo);
+                    }
+                });
+
+
+    const counts = {};
+    signos.forEach((x) => {
+      counts[x] = (counts[x] || 0) + 1;
+    });
+    console.log(counts)
+
+
+
+            }
+            estudiantes().catch((error) => console.error(error));
+
+            function compatibilidad(valor) {
+                respuesta.innerHTML = ``;
+                detalles.innerHTML = ``;
+
+                //Información de Quinto Poder
+
+                if (valor == "fijo") {
+                    about =
+                        "Los signos fijos son aquellos que están en medio del desarrollo de las estaciones (primavera, verano, otoño e invierno). Estos signos poseen el gusto por el respeto y seguimiento del orden y las estructuras para lograr sus objetivos.";
+                } else if (valor == "mutable") {
+                    about =
+                        "Son aquellos que marcan el final de las estaciones, su cierre y por lo tanto su subsiguiente final. Los mutables tienen el increíble don de la adaptabilidad, ellos no se encasillan en una sola definición o norma. En ellos coexisten las contradicciones que a ojos de otros observadores serían irreconciliables.";
+                } else if (valor == "cardinal") {
+                    about =
+                        "Están en los inicios de las nuevas estaciones son aquellos que se caracterizan por su inclinación a iniciar cosas nuevas. Las personas nacidas bajo estos signos tiene la facilidad de ser proactivos, decididos y con el gusto por iniciar cambios.";
+                } else if (valor == "Tauro"){ //Descripción de Clara
+                    about =
+                        "Son leales y determinados. Cuando algo se le mete en la cabeza, no hay forma de que lo olvide. Tanto para lo bueno, como para lo malo. Si tu signo es Tauro, entonces seguro que eres una persona muy fiel y leal. Tienes una gran fuerza de voluntad, que te ayuda a perseverar, enfrentándote a cualquier dificultad con tal de alcanzar tus metas.";
+                } else {
+                    about = "Diseño y nuevos medios."
+                }
+
+                detalles.innerHTML += `<div><p>${about}</p></div>`;
+
+                datos.forEach((x) => {
+                    if (valor == x.zodiaco.signo) {
+                        respuesta.innerHTML += `<article><div><img src="${x.avatar}"></div><div><p><a href="integrante.html?lista=${x.lista}">${x.nombres.split(" ")[0]} ${x.apellidos.split(" ")[0]}</a></p><p>${
+                            x.zodiaco.signo
+                        }</p></div></article>`;
+                    }
+
+                    else if (valor == x.zodiaco.modalidad) {
+                        respuesta.innerHTML += `<article><div><img src="${x.avatar}"></div><div><p><a href="integrante.html?lista=${x.lista}">${x.nombres.split(" ")[0]} ${x.apellidos.split(" ")[0]}</a></p><p>${
+                            x.zodiaco.signo
+                        }</p></div></article>`;
+                    }
+                });
+            }
+
+            const seleccionado = document.querySelectorAll('input[name="selecciona"]');
+
+            seleccionado.forEach((i) => {
+                i.addEventListener("change", function () {
+                    var valor = this.value;
+                    if (valor !== "todos"){
+                        console.log(valor);
+                        compatibilidad(valor);
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
